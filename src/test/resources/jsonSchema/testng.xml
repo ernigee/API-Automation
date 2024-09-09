@@ -4,6 +4,7 @@
     <test name="Test get dan Post">
         <classes>
             <class name="TestReqres">
+            </class>
         </classes>
     </test>
 </Suite>
