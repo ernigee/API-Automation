@@ -1,4 +1,6 @@
+import com.github.fge.jsonschema.main.JsonSchema;
 import io.restassured.RestAssured;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.json.JSONException;
@@ -6,19 +8,26 @@ import org.json.JSONObject;
 import org.testng.annotations.Test;
 import io.restassured.specification.RequestSpecification;
 
+import java.io.File;
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
 
 public class TestReqres {
+
+
     @Test
     public void testGetUserList() {
+
+        File jsonSchema = new File("src/test/resources/jsonSchema/getListUserSchema.json");
+
         given().when()
                 .get("https://reqres.in/api/users?page=2")
                 .then().log().all()
                 .assertThat().statusCode(200)
                 .assertThat().body("per_page", Matchers.equalTo(6))
-                .assertThat().body("page", Matchers.equalTo(2));
+                .assertThat().body("page", Matchers.equalTo(2))
+                .assertThat().body(JsonSchemaValidator.matchesJsonSchema(jsonSchema));
     }
 
     @Test
